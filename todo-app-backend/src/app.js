@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const taskRoutes = require('./routes/taskRoutes');
+const { errorHandler } = require('./middleware/errorHandler');
 require('dotenv').config();
 
 const app = express();
@@ -14,10 +15,13 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => {
         console.error('Error al conectar a MongoDB:', err);
         process.exit(1);
-});
+    });
 
 // Rutas
 app.use('/api', taskRoutes);
+
+// Middleware de manejo de errores
+app.use(errorHandler);
 
 // Puerto
 const PORT = process.env.PORT || 3000;
